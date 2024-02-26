@@ -10,6 +10,8 @@ import { TextGeometry } from 'three/examples/jsm/geometries/TextGeometry.js'
 // Debug
 const gui = new GUI()
 
+gui.hide()
+
 // Canvas
 const canvas = document.querySelector('canvas.webgl')
 
@@ -145,7 +147,7 @@ window.addEventListener('resize', () =>
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
 camera.position.x = 1
 camera.position.y = 1
-camera.position.z = 2
+camera.position.z = 60
 scene.add(camera)
 
 // Controls
@@ -166,20 +168,32 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
  */
 const clock = new THREE.Clock()
 
-const tick = () =>
-{
-    const elapsedTime = clock.getElapsedTime()
 
+let animateCamera = true; // Flag to control the animation
+
+const tick = () => {
     // Update controls
-    controls.update()
+    controls.update();
 
+    // Animate camera position with easing towards the end
+    if (camera.position.z > 3 && animateCamera) {
+        // Implement easing here, for example:
+        // Decrease z position by a smaller amount as it gets closer to 1
+        let step = (camera.position.z - 3) * 0.04;
+        camera.position.z -= Math.max(step, 0.001);
+    } else if (animateCamera) {
+        camera.position.z = 3; // Ensure it doesn't go below 1
+        animateCamera = false; // Stop the animation
+    }
 
     // Render
-    renderer.render(scene, camera)
+    renderer.render(scene, camera);
 
     // Call tick again on the next frame
-    window.requestAnimationFrame(tick)
+    window.requestAnimationFrame(tick);
 }
 
-tick()
+tick();
+
+
 
