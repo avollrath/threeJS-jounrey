@@ -43,7 +43,7 @@ fontLoader.load(
     (font) => 
     {
         const textGeometry = new TextGeometry(
-            'Andre \nVollrath',
+            'Meeting\nat 11:00\nFinnish time?',
             {
                 font: font,
                 size: 0.5,
